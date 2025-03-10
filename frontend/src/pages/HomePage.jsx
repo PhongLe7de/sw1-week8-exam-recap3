@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-// import JobListings from "../components/JobListings";
 import PropertyListings from "../components/PropertyListings";
-const Home = () => {
+const Home = ({propertyAdded,propertyEdited,propertyDeleted}) => {
   const [properties, setProperties] = useState(null);
   const [isPending, setIsPending] = useState(true);
   const [error, setError] = useState(null);
@@ -24,7 +23,7 @@ const Home = () => {
     };
     // setTimeout(() => {fetchProperties();}, 1000); // Delay of 1 second
     fetchProperties();
-  }, []);
+  }, [propertyAdded,propertyEdited,propertyDeleted]);
 
   return (
     <div className="home">

@@ -1,12 +1,14 @@
-import { useParams, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-const PropertyPage = ({setPropertyDeleted}) => {
-  const navigate = useNavigate();
-  const { id } = useParams();
-  const [property, setProperty] = useState(null);
-  const [loading, setLoading] = useState(true);
+import { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+
+const PropertyPage = ({ setPropertyDeleted }) => {
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [property, setProperty] = useState(null);
+
+  const { id } = useParams();
+  const navigate = useNavigate();
 
   const deleteProperty = async (id) => {
     try {
@@ -37,7 +39,6 @@ const PropertyPage = ({setPropertyDeleted}) => {
         setLoading(false);
       }
     };
-
     fetchProperty();
   }, [id]);
 
@@ -46,7 +47,6 @@ const PropertyPage = ({setPropertyDeleted}) => {
       "Are you sure you want to delete this listing?" + propertyId
     );
     if (!confirm) return;
-
     deleteProperty(propertyId);
     setPropertyDeleted(true);
     navigate("/");
@@ -63,15 +63,10 @@ const PropertyPage = ({setPropertyDeleted}) => {
           <h2>{property.title}</h2>
           <p>Type: {property.type}</p>
           <p>Description: {property.description}</p>
-          {/* <p>Company: {property.company.name}</p>
-          <p>Email: {property.company.contactEmail}</p>
-          <p>Phone: {property.company.contactPhone}</p> */}
           <button onClick={() => onDeleteClick(property._id)}>Delete</button>
-
           <button>
-            <Link to={`/edit-job/${property.id}`}>Edit Job</Link>
+            <Link to={`/edit-property/${property._id}`}>Edit</Link>
           </button>
-
         </>
       )}
     </div>

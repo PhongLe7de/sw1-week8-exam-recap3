@@ -1,19 +1,33 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const AddPropertyPage = () => {
-  const [title, setTitle] = useState("");
-  const [type, setType] = useState("Apartment");
-  const [description, setDescription] = useState("");
-  const [price, setPrice] = useState("");
-  const [address, setAddress] = useState("");
+const AddPropertyPage = ({ setPropertyAdded }) => {
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
+  const [title, setTitle] = useState("");
+  const [price, setPrice] = useState("");
+  const [address, setAddress] = useState("");
   const [zipCode, setZipCode] = useState("");
-  const [squareFeet, setSquareFeet] = useState("");
+  const [type, setType] = useState("Apartment");
   const [yearBuilt, setYearBuilt] = useState("");
+  const [squareFeet, setSquareFeet] = useState("");
+  const [description, setDescription] = useState("");
 
   const navigate = useNavigate();
+
+  const propertyTypes = ["Apartment", "House", "Condo", "Commercial"];
+  
+  const formFields = [
+    { label: "Property Title", value: title, setValue: setTitle, type: "text" },
+    { label: "Property Description", value: description, setValue: setDescription, type: "textarea" },
+    { label: "Price", value: price, setValue: setPrice, type: "number" },
+    { label: "Address", value: address, setValue: setAddress, type: "text" },
+    { label: "City", value: city, setValue: setCity, type: "text" },
+    { label: "State", value: state, setValue: setState, type: "text" },
+    { label: "Zip Code", value: zipCode, setValue: setZipCode, type: "text" },
+    { label: "Square Feet", value: squareFeet, setValue: setSquareFeet, type: "number" },
+    { label: "Year Built", value: yearBuilt, setValue: setYearBuilt, type: "number" },
+  ];
 
   const addProperty = async (newProperty) => {
     try {
@@ -53,90 +67,42 @@ const AddPropertyPage = () => {
     };
 
     addProperty(newProperty);
-    return navigate("/");
+    setPropertyAdded(true);
+    navigate("/");
   };
 
   return (
     <div className="create">
       <h2>Add a New Property</h2>
       <form onSubmit={submitForm}>
-        <label>Property Title:</label>
-        <input
-          type="text"
-          required
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
+        {formFields.map(({ label, value, setValue, type }) => (
+          <div key={label}>
+            <label>{label}:</label>
+            {type === "textarea" ? (
+              <textarea
+                required
+                value={value}
+                onChange={(e) => setValue(e.target.value)}
+              ></textarea>
+            ) : (
+              <input
+                type={type}
+                required
+                value={value}
+                onChange={(e) => setValue(e.target.value)}
+              />
+            )}
+          </div>
+        ))}
+
         <label>Property Type:</label>
         <select value={type} onChange={(e) => setType(e.target.value)}>
-          <option value="Apartment">Apartment</option>
-          <option value="House">House</option>
-          <option value="Condo">Condo</option>
-          <option value="Commercial">Commercial</option>
+          {propertyTypes.map((propertyType) => (
+            <option key={propertyType} value={propertyType}>
+              {propertyType}
+            </option>
+          ))}
         </select>
-
-        <label>Property Description:</label>
-        <textarea
-          required
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        ></textarea>
-
-        <label>Price:</label>
-        <input
-          type="number"
-          required
-          value={price}
-          onChange={(e) => setPrice(e.target.value)}
-        />
-
-        <label>Address:</label>
-        <input
-          type="text"
-          required
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}
-        />
-
-        <label>City:</label>
-        <input
-          type="text"
-          required
-          value={city}
-          onChange={(e) => setCity(e.target.value)}
-        />
-
-        <label>State:</label>
-        <input
-          type="text"
-          required
-          value={state}
-          onChange={(e) => setState(e.target.value)}
-        />
-
-        <label>Zip Code:</label>
-        <input
-          type="text"
-          required
-          value={zipCode}
-          onChange={(e) => setZipCode(e.target.value)}
-        />
-
-        <label>Square Feet:</label>
-        <input
-          type="number"
-          required
-          value={squareFeet}
-          onChange={(e) => setSquareFeet(e.target.value)}
-        />
-
-        <label>Year Built:</label>
-        <input
-          type="number"
-          required
-          value={yearBuilt}
-          onChange={(e) => setYearBuilt(e.target.value)}
-        />
 
         <button>Add Property</button>
       </form>
